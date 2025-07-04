@@ -23,10 +23,10 @@ export const MovieProvider = ({ children }) => {
   const BASE_URL = "https://api.themoviedb.org/3";
 
   useEffect(() => {
-    console.log(
-      "VITE_TMDB_API_KEY in production:",
-      import.meta.env.VITE_TMDB_API_KEY
-    );
+    // console.log(
+    //   "VITE_TMDB_API_KEY in production:",
+    //   import.meta.env.VITE_TMDB_API_KEY
+    // );
     if (!API_KEY) {
       setError("TMDB API key is missing. Please check environment variables.");
       setLoading(false);
