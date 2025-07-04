@@ -23,58 +23,81 @@ export const MovieProvider = ({ children }) => {
   const BASE_URL = "https://api.themoviedb.org/3";
 
   useEffect(() => {
+    if (!API_KEY) {
+      setError("TMDB API key is missing. Please check environment variables.");
+      setLoading(false);
+      console.error("API Key Missing: VITE_TMDB_API_KEY is not set.");
+      return;
+    }
+
     const fetchHomeData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const trendingRes = await axios.get(
-          `${BASE_URL}/trending/all/day?api_key=${API_KEY}&language=en-US`
-        );
-        console.log("Trending Data:", trendingRes.data.results);
-        setTrending(trendingRes.data.results);
+        const endpoints = [
+          {
+            url: `${BASE_URL}/trending/all/day?api_key=${API_KEY}&language=en-US`,
+            setter: setTrending,
+            name: "Trending",
+          },
+          {
+            url: `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`,
+            setter: setNewMovies,
+            name: "New Movies",
+          },
+          {
+            url: `${BASE_URL}/tv/airing_today?api_key=${API_KEY}&language=en-US&page=1`,
+            setter: setNewSeries,
+            name: "New Series",
+          },
+          {
+            url: `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`,
+            setter: (data) => {
+              setPopularMovies(data);
+              setRecommended(data.sort(() => 0.5 - Math.random()).slice(0, 10));
+            },
+            name: "Popular Movies",
+          },
+          {
+            url: `${BASE_URL}/tv/popular?api_key=${API_KEY}&language=en-US&page=1`,
+            setter: setPopularSeries,
+            name: "Popular Series",
+          },
+          {
+            url: `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`,
+            setter: setTopRatedMovies,
+            name: "Top Rated Movies",
+          },
+          {
+            url: `${BASE_URL}/tv/top_rated?api_key=${API_KEY}&language=en-US&page=1`,
+            setter: setTopRatedSeries,
+            name: "Top Rated Series",
+          },
+        ];
 
-        const newMoviesRes = await axios.get(
-          `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`
-        );
-        setNewMovies(newMoviesRes.data.results);
-
-        const newSeriesRes = await axios.get(
-          `${BASE_URL}/tv/airing_today?api_key=${API_KEY}&language=en-US&page=1`
-        );
-        setNewSeries(newSeriesRes.data.results);
-
-        const popularRes = await axios.get(
-          `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
-        );
-        const randomRecommended = popularRes.data.results
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 10);
-        setRecommended(randomRecommended);
-        setPopularMovies(popularRes.data.results);
-
-        const popularSeriesRes = await axios.get(
-          `${BASE_URL}/tv/popular?api_key=${API_KEY}&language=en-US&page=1`
-        );
-        setPopularSeries(popularSeriesRes.data.results);
-
-        const topRatedMoviesRes = await axios.get(
-          `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`
-        );
-        setTopRatedMovies(topRatedMoviesRes.data.results);
-
-        const topRatedSeriesRes = await axios.get(
-          `${BASE_URL}/tv/top_rated?api_key=${API_KEY}&language=en-US&page=1`
-        );
-        setTopRatedSeries(topRatedSeriesRes.data.results);
-
+        for (const { url, setter, name } of endpoints) {
+          try {
+            const response = await axios.get(url);
+            console.log(`${name} Data:`, response.data.results);
+            setter(response.data.results);
+          } catch (err) {
+            console.error(`Error fetching ${name}:`, {
+              message: err.message,
+              status: err.response?.status,
+              data: err.response?.data,
+            });
+            throw new Error(`Failed to fetch ${name}: ${err.message}`);
+          }
+        }
         setLoading(false);
       } catch (err) {
-        setError("Failed to fetch home data: " + err.message);
+        setError(`Failed to fetch home data: ${err.message}`);
         setLoading(false);
-        console.error(
-          "Error fetching home data:",
-          err.response?.data || err.message
-        );
+        console.error("Error fetching home data:", {
+          message: err.message,
+          status: err.response?.status,
+          data: err.response?.data,
+        });
       }
     };
 
@@ -146,12 +169,13 @@ export const MovieProvider = ({ children }) => {
         }
         setLoading(false);
       } catch (err) {
-        setError("Failed to fetch data: " + err.message);
+        setError(`Failed to fetch data: ${err.message}`);
         setLoading(false);
-        console.error(
-          "Error fetching data:",
-          err.response?.data || err.message
-        );
+        console.error(`Error fetching ${contentType} (${filter}):`, {
+          message: err.message,
+          status: err.response?.status,
+          data: err.response?.data,
+        });
       }
     };
 
@@ -169,10 +193,11 @@ export const MovieProvider = ({ children }) => {
       console.log(`Trailer for ${type} ID ${id}:`, trailer);
       return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
     } catch (err) {
-      console.error(
-        "Error fetching trailer:",
-        err.response?.data || err.message
-      );
+      console.error("Error fetching trailer:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+      });
       return null;
     }
   };
