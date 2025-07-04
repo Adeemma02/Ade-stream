@@ -69,11 +69,13 @@ const Home = () => {
   return (
     <div className="mx-auto w-full">
       <HeroSection />
-      <div className="container px-4 py-8">
+      <div className=" px-4 py-8">
         {sections.map((section) => (
           <div key={section.title} className="my-12">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-white">{section.title}</h2>
+              <h2 className="text-xl md:text-3xl font-bold text-white">
+                {section.title}
+              </h2>
               {section.data.length > 0 && (
                 <div className="flex space-x-2">
                   <button

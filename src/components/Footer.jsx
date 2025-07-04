@@ -1,5 +1,4 @@
 import React from "react";
-import { Film } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -10,8 +9,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <Film className="h-6 w-6 text-red-500" />
-              <h3 className="text-xl font-bold text-white">CineStream</h3>
+              <h1 className="text-xl lg:text-2xl font-bold text-white">
+                <span className="text-red-500">Ade</span>Stream
+              </h1>
             </div>
             <p className="text-gray-400">
               Your ultimate destination for movies and TV series. Discover,
@@ -140,7 +140,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400">
-            © {currentYear} CineStream. All rights reserved. | Powered by TMDB
+            © {currentYear} AdeStream. All rights reserved. | Powered by TMDB
             API
           </p>
         </div>

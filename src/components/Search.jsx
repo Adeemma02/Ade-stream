@@ -3,7 +3,8 @@ import { MovieContext } from "../context/MovieContext";
 import Content from "./Content";
 
 const Search = () => {
-  const { movies, series, loading, error } = useContext(MovieContext);
+  const { movies, series, popularMovies, loading, error, searchQuery } =
+    useContext(MovieContext);
 
   if (loading) {
     return (
@@ -21,11 +22,18 @@ const Search = () => {
     );
   }
 
-  const displayData = [...movies, ...series];
+  // Use popularMovies or a random selection when searchQuery is empty
+  const displayData = searchQuery.trim()
+    ? [...movies, ...series]
+    : popularMovies.length > 0
+    ? popularMovies
+    : [...movies, ...series].sort(() => Math.random() - 0.5).slice(0, 20); // Fallback to random selection, limited to 20 items
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-white mb-8">Search Results</h2>
+      <h2 className="text-3xl font-bold text-white mb-8">
+        {searchQuery.trim() ? "Search Results" : "Popular Content"}
+      </h2>
       {displayData.length === 0 ? (
         <p className="text-gray-400 text-lg">No content found.</p>
       ) : (
