@@ -25,7 +25,7 @@ const Content = ({ item, contentType }) => {
 
   return (
     <>
-      <div className="bg-gray-800 rounded-lg md:h-[380px] h-[350px] overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+      <div className="bg-gray-800 rounded-lg md:h-[380px] h-[365px] overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
         <div className="relative">
           <div className="aspect-w-2 aspect-h-3 bg-gray-700">
             <img
