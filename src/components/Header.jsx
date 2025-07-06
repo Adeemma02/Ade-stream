@@ -9,7 +9,7 @@ import {
   Sparkles,
   ChevronDown,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import debounce from "lodash/debounce";
 
 const Header = () => {
@@ -75,9 +75,17 @@ const Header = () => {
       <div className="w-full lg:px-8 px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <h1 className="text-xl lg:text-2xl font-bold text-white">
-              <span className="text-red-500">Ade</span>Stream
-            </h1>
+            <button
+              onClick={() => {
+                setContentType("home");
+                // setFilter("popular");
+                navigate("/");
+              }}
+            >
+              <h1 className="text-xl lg:text-2xl font-bold text-white">
+                <span className="text-red-500">Ade</span>Stream
+              </h1>
+            </button>
           </div>
 
           <nav className="hidden md:flex items-center space-x-3 lg:space-x-5">

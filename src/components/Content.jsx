@@ -25,7 +25,7 @@ const Content = ({ item, contentType }) => {
 
   return (
     <>
-      <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+      <div className="bg-gray-800 rounded-lg md:h-[380px] h-[350px] overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
         <div className="relative">
           <div className="aspect-w-2 aspect-h-3 bg-gray-700">
             <img
@@ -39,10 +39,11 @@ const Content = ({ item, contentType }) => {
             <span>{item.vote_average}</span>
           </div>
         </div>
-        <div className="p-4">
-          <h3 className="text-white font-semibold text-base mb-2 line-clamp-2">
+        <div className="p-4 flex flex-col justify-between">
+          <h3 className="text-white font-semibold text-base mb-2 line-clamp-2 min-h-[2.75rem]">
             {item.title || item.name}
           </h3>
+
           <div className="flex items-center text-gray-400 text-[12px] mb-2">
             <Calendar className="h-4 w-4 mr-1" />
             <span>{item.release_date || item.first_air_date}</span>
